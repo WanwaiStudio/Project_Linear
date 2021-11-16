@@ -11,15 +11,15 @@ from tkinter import messagebox
 
 root = Tk()
 root.title("Music Convertor")
-root.geometry("800x500")
+root.geometry("600x374")
 
 
 #================ Background ====================#
-bg = PhotoImage(file="Project_Linear/test3.png")
+bg = PhotoImage(file="test.png")
 mylabel = Label(root, image=bg)
 mylabel.place(x=0, y=0, relwidth=1, relheight=1)
 
-frame = LabelFrame(root, text="test for this",padx=50)
+frame = LabelFrame(root, text="Music Convertor",padx=50,pady=5)
 frame.pack()
 #================== INP Field ====================#
 e = Entry(frame)
@@ -36,7 +36,7 @@ def save_as():
     index = 0
     global tempforpath
     for i in range(len(path_save)):
-        print(i)
+        #print(i)
         if path_save[i] == '=':
             index = i + 2
             break
@@ -47,20 +47,21 @@ def save_as():
             tempforpath += path_save[index]
     tempforpath += "mid"
         
-    print("Path is : {} len = {}".format(path_save,len(path_save)))
-    print("Path is : {}".format(tempforpath))
+    #print("Path is : {} len = {}".format(path_save,len(path_save)))
+    #print("Path is : {}".format(tempforpath))
 
 def browse_file():
-    midi_file = file.askopenfilename()
-    if midi_file == '':
-        pass
-    else:
-        path_for_generate.append(midi_file)
-    e.insert(0,str(path_for_generate))
+    midi_file = file.askopenfilenames()
+    for i in range(len(midi_file)):
+        path_for_generate.append(midi_file[i])
+        print("{} midi path : {}".format(i+1,midi_file[i]))
+    print("Path for gen : {}".format(path_for_generate))
+    e.insert(0,str(midi_file))
 
 def generate():
     run = True
-    print("midi file : {}".format(path_for_generate))
+    for i in range(len(midi_file)):
+        print("{} midi path : {}".format(i+1,midi_file[i]))
     global tempforpath
     if run is True and tempforpath != '' :
 
@@ -143,8 +144,8 @@ def generate():
         for i in range(len(result)):
             noteresult=int(np.floor(result[i]/4))
             timeresult=(result[i]%4)+1
-            print(NOTE_NAMES[noteresult],end="")
-            print(timeresult)
+            #print(NOTE_NAMES[noteresult],end="")
+            #print(timeresult)
             #midi
             track.append(mido.Message('note_on', note=octave*12+noteresult, velocity=50, time=0))
             track.append(mido.Message('note_off', note=octave*12+noteresult, velocity=0, time=timeresult*120))
@@ -156,7 +157,7 @@ def generate():
         note2sim=note2.reshape(110592)
         note2resultsim=note2result.reshape(110592)
         similarity_scores = np.dot(note2sim, note2resultsim)/(np.linalg.norm(note2sim)*np.linalg.norm(note2resultsim))
-        print(similarity_scores)
+        #print(similarity_scores)
         print("finished build")
         tempforpath = ''
         run = False
@@ -179,7 +180,7 @@ btn2 = Button(frame, text="Generate",command=generate)
 btn2.pack(pady=10)
 
 btn3 = Button(frame, text="Exit",command=root.quit)
-btn3.pack(pady=70)
+btn3.pack(pady=40)
 
 
 
