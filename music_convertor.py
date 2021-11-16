@@ -29,12 +29,14 @@ path_for_generate = []
 run = False
 midi_file = ()
 tempforpath = ''
+memory_save_path = ''
 
 def save_as():
     path_save = str(file.asksaveasfile(defaultextension='.mid'))
     check = 0
     index = 0
     global tempforpath
+    global memory_save_path
     for i in range(len(path_save)):
         #print(i)
         if path_save[i] == '=':
@@ -45,7 +47,9 @@ def save_as():
             break
         elif path_save[index] != 'm':
             tempforpath += path_save[index]
+            memory_save_path += path_save[index]
     tempforpath += "mid"
+    memory_save_path += "mid"
         
     #print("Path is : {} len = {}".format(path_save,len(path_save)))
     #print("Path is : {}".format(tempforpath))
@@ -63,7 +67,9 @@ def generate():
     for i in range(len(midi_file)):
         print("{} midi path : {}".format(i+1,midi_file[i]))
     global tempforpath
-    if run is True and tempforpath != '' :
+    if tempforpath == '':
+        messagebox.showerror("Error","Plese add save path!")
+    elif run is True and tempforpath != '' :
 
         np.set_printoptions(threshold=sys.maxsize) #set full output
         note2 = np.zeros((2304,48)).astype(int) #second markov chain
@@ -162,8 +168,7 @@ def generate():
         tempforpath = ''
         run = False
         messagebox.showinfo("Notification","Done!")
-    if tempforpath == '':
-        messagebox.showerror("Error","Plese add save path!")
+    
 
 
 
